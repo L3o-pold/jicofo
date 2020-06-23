@@ -67,7 +67,7 @@ public interface ReservationSystem
      * went wrong. Error details will be returned in XMPP error IQ containing
      * {@link org.jitsi.xmpp.extensions.jitsimeet.ReservationErrorPacketExt}.
      */
-    public Result createConference(String owner, EntityBareJid name);
+    public Result createConference(String owner, EntityBareJid name, String customerRoomName);
 
     /**
      * Structure for returning result details.

@@ -369,12 +369,17 @@ public class FocusComponent
         if (!roomExists && reservationSystem != null)
         {
             EntityBareJid room = query.getRoom();
+            String customerRoomName = query.getPropertiesMap().get("customerRoomName");
+
+            if (customerRoomName == null) {
+                customerRoomName = room.getLocalpartOrThrow().toString();
+            }
 
             ReservationSystem.Result result
-                = reservationSystem.createConference(identity, room);
+                = reservationSystem.createConference(identity, room, customerRoomName);
 
             logger.info(
-                "Create room result: " + result + " for " + room);
+                "Create room result: " + result + " for " + room + " customer name " + customerRoomName);
 
             if (result.getCode() != ReservationSystem.RESULT_OK)
             {
