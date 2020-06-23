@@ -1,4 +1,4 @@
-FROM maven:3.6.3-jdk-15 as vendor
+FROM maven:3.6.3-openjdk-15 as vendor
 
 WORKDIR /var/www/jicofo
 
