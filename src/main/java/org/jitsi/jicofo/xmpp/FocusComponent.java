@@ -370,8 +370,10 @@ public class FocusComponent
         {
             EntityBareJid room = query.getRoom();
 
+            String customerRoomName = query.getPropertiesMap().get("customerRoomName");
+
             ReservationSystem.Result result
-                = reservationSystem.createConference(identity, room);
+                = reservationSystem.createConference(identity, room, customerRoomName);
 
             logger.info(
                 "Create room result: " + result + " for " + room);

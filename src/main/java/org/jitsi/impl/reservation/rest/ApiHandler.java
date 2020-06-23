@@ -53,6 +53,11 @@ public class ApiHandler
     private final String baseUrl;
 
     /**
+     * Auth access token
+     */
+    private final String accessToken;
+
+    /**
      * HTTP client used for sending requests.
      */
     private final CloseableHttpClient client
@@ -78,10 +83,12 @@ public class ApiHandler
      * Creates new instance of <tt>ApiHandler</tt>.
      *
      * @param baseUrl the base URL of REST API.
+     * @param accessToken the acess token of REST API.
      */
-    public ApiHandler(String baseUrl)
+    public ApiHandler(String baseUrl, String accessToken)
     {
         this.baseUrl = baseUrl;
+        this.accessToken = accessToken;
     }
 
     /**
@@ -101,13 +108,15 @@ public class ApiHandler
      *         parsing have occurred.
      */
     public ApiResult createNewConference(String ownerEmail,
-                                         EntityBareJid mucRoomName)
+                                         EntityBareJid mucRoomName,
+                                         String customerRoomName)
             throws IOException, ParseException
     {
         Conference conference
             = new Conference(mucRoomName, ownerEmail, new Date());
 
         HttpPost post = new HttpPost(baseUrl + "/conference");
+        post.addHeader("Authorization", "Bearer " + accessToken);
 
         List<NameValuePair> nameValuePairs = new ArrayList<>(1);
         Map<String, Object> jsonMap = conference.createJSonMap();
@@ -118,6 +127,9 @@ public class ApiHandler
                 new BasicNameValuePair(
                         entry.getKey(), String.valueOf(entry.getValue())));
         }
+
+        // Add Infomaniak customer room name
+        nameValuePairs.add(new BasicNameValuePair("customer_name", customerRoomName));
 
         post.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF8"));
 
@@ -173,6 +185,7 @@ public class ApiHandler
             throws IOException, ParseException
     {
         HttpGet get = new HttpGet(baseUrl + "/conference/" + conferenceId);
+        get.addHeader("Authorization", "Bearer " + accessToken);
 
         HttpResponse response = null;
         
@@ -222,6 +235,7 @@ public class ApiHandler
     {
         HttpDelete delete
             = new HttpDelete(baseUrl + "/conference/" + conferenceId);
+        delete.addHeader("Authorization", "Bearer " + accessToken);
 
         HttpResponse response = null;
 

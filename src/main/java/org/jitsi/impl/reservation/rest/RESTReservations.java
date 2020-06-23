@@ -50,6 +50,12 @@ public class RESTReservations
         = "org.jitsi.impl.reservation.rest.BASE_URL";
 
     /**
+     * Configuration property name which specifies REST API base URL.
+     */
+    public static final String API_ACCESS_TOKEN_PNAME
+            = "org.jitsi.impl.reservation.rest.ACCESS_TOKEN";
+
+    /**
      * Focus manager instance.
      */
     private FocusManager focusManager;
@@ -77,12 +83,14 @@ public class RESTReservations
     /**
      * Creates new instance of <tt>RESTReservations</tt> instance.
      * @param baseUrl base URL for RESP API endpoint.
+     * @param accessToken acess token for RESP API endpoint.
      */
-    public RESTReservations(String baseUrl)
+    public RESTReservations(String baseUrl, String accessToken)
     {
         Assert.notNullNorEmpty(baseUrl, "baseUrl: " + baseUrl);
+        Assert.notNullNorEmpty(accessToken, "accessToken: " + accessToken);
 
-        this.api = new ApiHandler(baseUrl);
+        this.api = new ApiHandler(baseUrl, accessToken);
     }
 
     /**
@@ -128,8 +136,7 @@ public class RESTReservations
     /**
      * {@inheritDoc}
      */
-    public synchronized Result createConference(String creator,
-                                                EntityBareJid mucRoomName)
+    public synchronized Result createConference(String creator, EntityBareJid mucRoomName, String customerRoomName)
     {
         Conference conference = conferenceMap.get(mucRoomName);
         if (conference == null)
@@ -138,7 +145,7 @@ public class RESTReservations
             try
             {
                 ApiHandler.ApiResult result
-                    = api.createNewConference(creator, mucRoomName);
+                    = api.createNewConference(creator, mucRoomName, customerRoomName);
 
                 if (result.error == null)
                 {
