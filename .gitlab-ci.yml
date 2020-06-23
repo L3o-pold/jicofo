@@ -1,0 +1,38 @@
+image: docker:latest
+
+stages:
+  - build_docker_image
+  - publish
+
+cache:
+  key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+
+build_docker_image_tags:
+  stage: build_docker_image
+  tags:
+    - docker
+    - shell
+  only:
+    - tags
+  script:
+    - docker build --pull -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG} .
+
+publish_tags:
+  stage: publish
+  tags:
+    - docker
+    - shell
+  only:
+    - tags
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    # full alias
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+    # tag and push aliases
+    # short alias (eg.: "6")
+    - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG} ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG%%.*}
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG%%.*}
+    # long alias (eg.: "6.2")
+    - docker tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG} ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG%.*}
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG%.*}
