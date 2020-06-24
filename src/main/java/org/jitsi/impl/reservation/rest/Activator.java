@@ -65,7 +65,7 @@ public class Activator
 
         logger.info("REST reservation API will use base URL: " + apiBaseUrl);
 
-        if (isBlank(accessToken) === false) {
+        if (!isBlank(accessToken)) {
             logger.info("REST reservation API will use an access token");
         }
 
