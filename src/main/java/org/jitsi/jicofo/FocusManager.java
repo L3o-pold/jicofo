@@ -643,7 +643,11 @@ public class FocusManager
             // hold the lock or not.
             if (focusAllocListener != null)
             {
+                logger.info("lets destroy the room");
                 focusAllocListener.onFocusDestroyed(roomName);
+            } else
+            {
+                logger.info("No more focusAllocListener so no call to the api");
             }
 
             // Send focus destroyed event
