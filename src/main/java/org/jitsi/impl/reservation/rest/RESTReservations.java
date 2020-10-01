@@ -122,6 +122,7 @@ public class RESTReservations
     {
         if (focusManager != null)
         {
+            logger.info("setFocusAllocationListener RESTReservations to null wtf");
             focusManager.setFocusAllocationListener(null);
             focusManager = null;
         }

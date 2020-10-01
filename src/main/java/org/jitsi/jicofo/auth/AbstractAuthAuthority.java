@@ -567,6 +567,7 @@ public abstract class AbstractAuthAuthority
     {
         if (focusManager != null)
         {
+            logger.info("setFocusAllocationListener AbstractAuthAuthority to null wtf");
             focusManager.setFocusAllocationListener(null);
             focusManager = null;
         }
