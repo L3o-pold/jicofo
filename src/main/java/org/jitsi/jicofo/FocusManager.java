@@ -202,7 +202,7 @@ public class FocusManager
      * FIXME: remove eventually if not used anymore
      * The list of {@link FocusAllocationListener}.
      */
-    private FocusAllocationListener focusAllocListener;
+    private List<FocusAllocationListener> focusAllocListener = new ArrayList<>();
 
     /**
      * XMPP protocol provider handler used by the focus.
@@ -641,10 +641,14 @@ public class FocusManager
 
             // It is not clear whether the code below necessarily needs to
             // hold the lock or not.
-            if (focusAllocListener != null)
+            if (focusAllocListener.size() > 0)
             {
                 logger.info("lets destroy the room");
-                focusAllocListener.onFocusDestroyed(roomName);
+
+                for (FocusAllocationListener focusAllocList : focusAllocListener)
+                {
+                    focusAllocList.onFocusDestroyed(roomName);
+                }
             } else
             {
                 logger.info("No more focusAllocListener so no call to the api");
@@ -752,7 +756,7 @@ public class FocusManager
      */
     public void setFocusAllocationListener(FocusAllocationListener l)
     {
-        this.focusAllocListener = l;
+        this.focusAllocListener.add(l);
     }
 
     /**
