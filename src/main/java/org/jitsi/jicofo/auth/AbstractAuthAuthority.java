@@ -557,7 +557,7 @@ public abstract class AbstractAuthAuthority
             = ServiceUtils2.getService(
                     AuthBundleActivator.bundleContext, FocusManager.class);
 
-        focusManager.setFocusAllocationListener(this);
+        focusManager.setFocusAllocationListener(this.getClass().getSimpleName(), this);
     }
 
     /**
@@ -567,8 +567,7 @@ public abstract class AbstractAuthAuthority
     {
         if (focusManager != null)
         {
-            logger.info("setFocusAllocationListener AbstractAuthAuthority to null wtf");
-            focusManager.setFocusAllocationListener(null);
+            focusManager.setFocusAllocationListener(this.getClass().getSimpleName(), null);
             focusManager = null;
         }
 

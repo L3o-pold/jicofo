@@ -108,7 +108,7 @@ public class RESTReservations
 
         this.focusManager = Objects.requireNonNull(focusManager, "focusManager");
 
-        focusManager.setFocusAllocationListener(this);
+        focusManager.setFocusAllocationListener(this.getClass().getSimpleName(), this);
 
         confDurationGuard = new Timer("ConferenceDurationGuard");
         confDurationGuard.scheduleAtFixedRate(
@@ -122,8 +122,7 @@ public class RESTReservations
     {
         if (focusManager != null)
         {
-            logger.info("setFocusAllocationListener RESTReservations to null wtf");
-            focusManager.setFocusAllocationListener(null);
+            focusManager.setFocusAllocationListener(this.getClass().getSimpleName(), null);
             focusManager = null;
         }
         if (confDurationGuard != null)
